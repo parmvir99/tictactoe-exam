@@ -1,26 +1,36 @@
 <template>
-  <img alt="Vue logo" src="./assets/logo.png">
-  <HelloWorld msg="Welcome to Your Vue.js App"/>
+  <div class="">
+    <Tictactoe/>
+  </div>
 </template>
 
 <script>
-import HelloWorld from './components/HelloWorld.vue'
+import Tictactoe from './components/tictactoe.vue'
 
 export default {
   name: 'App',
   components: {
-    HelloWorld
+    Tictactoe
   }
 }
 </script>
 
 <style>
-#app {
-  font-family: Avenir, Helvetica, Arial, sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  text-align: center;
-  color: #2c3e50;
-  margin-top: 60px;
+@font-face {
+  font-family: 'Rudiment Medium';
+  font-style: normal;
+  font-weight: normal;
+  src: local('Rudiment Medium');
+  src: url('assets/fonts/Rudiment.woff') format('opentype');
+}
+html {
+  background:url(assets/bg.png);
+}
+body {
+  font-family:'Rudiment Medium' !important;
+  background-color: transparent !important;
+}
+h1, h2, h3, h4, h5, h6 {
+  color:#e0dbd1;
 }
 </style>
