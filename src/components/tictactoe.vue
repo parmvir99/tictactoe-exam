@@ -1,6 +1,7 @@
 <template lang="html">
   <div class="container p-5">
     <div class="">
+      <!-- Top section to show if who's turn is it -->
       <div class="d-flex justify-content-between">
         <div class="player">
             <h1>
@@ -21,15 +22,21 @@
         </div>
       </div>
     </div>
+    <!-- The for loops to create the board -->
     <div class="d-grid place-items-center pt-5">
       <div>
+        <!-- First loop to create array from 0 - 3 -->
+        <!-- The X and Y in the loops are to get the index of the square/tile -->
         <div v-for="(_, x) in 3" :key="x" class="row">
+          <!-- Second loop to create array from 0 - 3 -->
+          <!-- Clicking on the Square/tile, we are passing x and y index -->
           <div :class="{ 'pointer-none': squares[x][y] !== '', 'text-success': checkWinningCells[x][y], 'cell': true }" v-for="(_, y) in 3" :key="y" @click="move(x, y)">
             {{ squares[x][y] }}
           </div>
         </div>
       </div>
     </div>
+    <!-- Reset button to refresh the game -->
     <div class="text-center mt-5 pt-5">
       <button class="btn btn-light fw-bold btn-sm" type="button" name="button" @click="reset">Reset Board</button>
     </div>
@@ -41,9 +48,7 @@ export default {
   name:'tictactoe',
   data () {
     return {
-      test: null,
-      winningCells: null,
-      addClass: null,
+      // Some data to handle player and tiles and finally checking for winning cells
       player: 'X',
       squares: [
         ['', '', ''],
@@ -58,16 +63,21 @@ export default {
     }
   },
   computed: {
+    // This is a computed property, here we keep on checking if we have a winner or no
     winner () {
       return this.calculateWinner(this.squares.flat())
     }
   },
   methods: {
+    // The move function, this is being triggered everytime we click the tile
+    // It is accepting the x and y index, it assigns the next move to the player data
     move (x, y) {
       if (this.winner) return
       this.squares[x][y] = this.player
       this.player = this.player === 'O' ? 'X' : 'O'
     },
+
+    // Reset board function, it clears the arrays and resets the moves
     reset () {
       this.player = 'X'
       this.squares = [
@@ -82,7 +92,9 @@ export default {
       ]
     },
 
+    // Calculate winner function, here we do all our calculations to find out if someone won or its a draw
     calculateWinner (squares) {
+      // Below are the lines or the winning combination for tic tac toe game
       const lines = [
         [0, 1, 2],
         [3, 4, 5],
@@ -93,29 +105,39 @@ export default {
         [0, 4, 8],
         [2, 4, 6]
       ]
+      // The for loop to check each combination if somene has won
       for (let i = 0; i < lines.length; i++) {
         const [a, b, c] = lines[i]
+        // The if statement checks if there are same input in an array or in the combination
         if (squares[a] && squares[a] === squares[b] && squares[a] === squares[c]) {
           const cells = [a, b, c]
+          // The highlight function is to check if which tile is part of the victory
           this.highlight(cells)
           return squares[a]
         }
       }
-
+      // We will reach this part if the above loop did not find any winner
+      // We will check if no winner and there are no empty tiles then its a draw
       if (!squares.includes('')) {
         return 'draw'
       }
       return null
     },
 
+    // Here we are checking the winning tiles
     highlight (cells) {
-
+      // Duplicated data of board
       this.checkWinningCells = [
         ['', '', ''],
         ['', '', ''],
         ['', '', '']
       ]
+
+      // For loop to check if the winning tiles is in which index of the board tiles
       for (let i = 0; i < cells.length; i++) {
+        // The cell[i] containins the index of winning tile and it will check through  each swith case to  detect the winning tile
+        // Example: the winning tile is 2, 4, 6, so it will go the case 2, 4 and 6, then it will make the data true
+       // By setting the checkingWinningCells into true, is helping us to add colors on the winning tiles
         switch (cells[i]) {
           case 0:
             this.checkWinningCells[0][0] = true
@@ -152,6 +174,7 @@ export default {
 </script>
 
 <style lang="css">
+/* Stylings for our  each tile */
 .cell {
   padding:0 !important;
   display:grid;
@@ -163,21 +186,26 @@ export default {
   line-height:0;
   cursor: pointer;
 }
+/* Added border left to our tiles */
 .cell + .cell {
   border-left: 4px solid #8b8b8b;
 }
+/* Added border bottom  to our rows */
+/* The + sign helps us to assign a style into into the middle elements */
 .row + .row {
   border-top: 4px solid #8b8b8b;
 }
 .place-items-center {
   place-items:center;
 }
+
 .text-chalk {
   color:#e0dbd1;
 }
 .pointer-none {
   pointer-events: none;
 }
+/* Top section of the screen stylings below, mostly targeting the player */
 .player h2 {
   letter-spacing: 4px;
 }
@@ -211,6 +239,7 @@ button {
   letter-spacing: 3px;
 }
 
+/* Animation for the arrow that points if who's turn is it */
 @keyframes shake {
   10%, 90% {
     transform: translate3d(-1px, 0, 0);
